@@ -33,6 +33,8 @@ taxonomy <- read_tsv("Data/all_genomes_noDuplicates.tsv")
 
 used_in_htcondor <- taxonomy %>% filter(gtdb_species_representative == TRUE)
 
+write.table(x= used_in_htcondor, file="Output/accessions_used_for_cctyper.txt", sep="\t", row.names=FALSE)
+
 
 nrow(used_in_htcondor)
 
@@ -53,13 +55,7 @@ contigs_with_crispr$accession <- contigs_with_crispr$Folder
 # Remove everything after the 2nd underscore, including it
 contigs_with_crispr$accession  <- str_replace(contigs_with_crispr$accession, "^([^_]+_[^_]+)_.*","\\1")
 
-
-
 contigs_with_crispr <- left_join(contigs_with_crispr, taxonomy)
-
-
-
-
 
 contigs_with_crispr <- contigs_with_crispr %>% separate(gtdb_taxonomy, sep="; ", into=c("Domain","Phylum","Class","Order","Family","Genus","Species"))
 
@@ -71,6 +67,12 @@ unique(contigs_with_crispr$accession) %>% length()
 # Taxonomic distribution of the MAGs:
 
 write.table(x= contigs_with_crispr, file="Output/contigs_with_crispr.tsv", sep="\t", row.names=FALSE)
+
+# Comparison of how many genomes were queried vs. how many had positive results.
+
+nrow(used_in_htcondor)
+nrow(contigs_with_crispr)
+
 ```
 
 

@@ -1,0 +1,29 @@
+universe = docker
+docker_image = staphb/ncbi-datasets:18.35.0
+
+#notification = Always
+#notify_user = ptran5@wisc.edu
+ 
+executable = datasets.sh
+		
+arguments = $(accessions)
+
+transfer_input_files = $(accessions)
+transfer_output_files = host_genomes_$(accessions).zip
+transfer_output_remaps = "host_genomes_$(accessions).zip=file:///staging/p/ptran5/data/host_genomes_$(accessions).zip"
+
+log = logs/greA_genomes_$(Cluster)_$(Process).log
+error = logs/greA_genomes_$(Cluster)_$(Process).err
+output = logs/greA_genomes_$(Cluster)_$(Process).out
+   
+request_cpus = 2
+request_memory = 16GB
+request_disk = 20GB
+
+max_retries = 5
+ 
+queue accessions from (
+	xah
+)  
+
+#queue accessions from accessions_list.txt

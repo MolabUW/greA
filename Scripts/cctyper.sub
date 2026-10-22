@@ -1,0 +1,25 @@
+container_image = file:///staging/p/ptran5/all/apptainer/cctyper.sif
+
+executable = cctyper.sh
+
+arguments = $(accession)
+		
+#transfer_input_files = file:///staging/p/ptran5/$(sample).faa
+transfer_output_files = my_output.tar.gz
+transfer_output_remaps = "my_output.tar.gz=file:///staging/p/ptran5/cctyper_out/$(accession)_cctyper_output.tar.gz"
+
+max_idle = 1000
+
+log = logs/cctyper_$(Cluster).log
+error = logs/cctyper_$(Cluster)_$(Process).err
+output = logs/cctyper_$(Cluster)_$(Process).out
+   
+request_cpus = 20
+request_memory = 16GB
+request_disk = 16GB
+   
+#queue accession from (
+#	GCF_005280655.1
+#)
+
+queue accession from accessions2.txt

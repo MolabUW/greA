@@ -401,6 +401,13 @@ results %&gt;% group_by(Prediction) %&gt;% tally() %&gt;%
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>used_in_htcondor &lt;- taxonomy %&gt;% filter(gtdb_species_representative == TRUE)
+
+write.table(x= used_in_htcondor, file=&quot;Output/accessions_used_for_cctyper.txt&quot;, sep=&quot;\t&quot;, row.names=FALSE)
+
+
+nrow(used_in_htcondor)</code></pre>
+<pre><code>## [1] 14678</code></pre>
 <pre class="r"><code>contigs_with_crispr &lt;- read.table(&quot;Data/contigs_with_crispr_clean.txt&quot;, sep=&quot;\t&quot;, header=FALSE)
 
 colnames(results)</code></pre>
@@ -423,8 +430,6 @@ contigs_with_crispr$accession &lt;- contigs_with_crispr$Folder
 # Remove everything after the 2nd underscore, including it
 contigs_with_crispr$accession  &lt;- str_replace(contigs_with_crispr$accession, &quot;^([^_]+_[^_]+)_.*&quot;,&quot;\\1&quot;)
 
-
-
 contigs_with_crispr &lt;- left_join(contigs_with_crispr, taxonomy)</code></pre>
 <pre><code>## Joining with `by = join_by(accession)`</code></pre>
 <pre class="r"><code>contigs_with_crispr &lt;- contigs_with_crispr %&gt;% separate(gtdb_taxonomy, sep=&quot;; &quot;, into=c(&quot;Domain&quot;,&quot;Phylum&quot;,&quot;Class&quot;,&quot;Order&quot;,&quot;Family&quot;,&quot;Genus&quot;,&quot;Species&quot;))
@@ -436,7 +441,14 @@ contigs_with_crispr %&gt;% distinct() %&gt;% nrow()</code></pre>
 <pre><code>## [1] 1979</code></pre>
 <pre class="r"><code># Taxonomic distribution of the MAGs:
 
-write.table(x= contigs_with_crispr, file=&quot;Output/contigs_with_crispr.tsv&quot;, sep=&quot;\t&quot;, row.names=FALSE)</code></pre>
+write.table(x= contigs_with_crispr, file=&quot;Output/contigs_with_crispr.tsv&quot;, sep=&quot;\t&quot;, row.names=FALSE)
+
+# Comparison of how many genomes were queried vs. how many had positive results.
+
+nrow(used_in_htcondor)</code></pre>
+<pre><code>## [1] 14678</code></pre>
+<pre class="r"><code>nrow(contigs_with_crispr)</code></pre>
+<pre><code>## [1] 2654</code></pre>
 </div>
 <div id="summarize-family-level-all-the-data." class="section level1">
 <h1>Summarize family level all the data.</h1>

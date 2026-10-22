@@ -1,0 +1,14 @@
+Bootstrap: docker
+From: continuumio/miniconda3:latest
+
+%post
+	chmod 777 /tmp
+	apt-get update -y
+   	apt-get -y install libgomp1
+
+	. activate	
+	
+	conda create -n cctyper bioconda::blast "python>=3.10"
+	conda activate cctyper
+	pip install git+https://github.com/Russel88/CRISPRCasTyper.git
+	conda deactivate
