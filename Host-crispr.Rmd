@@ -31,6 +31,10 @@ results %>% group_by(Prediction) %>% tally() %>%
 
 taxonomy <- read_tsv("Data/all_genomes_noDuplicates.tsv")
 
+used_in_htcondor <- taxonomy %>% filter(gtdb_species_representative == TRUE)
+
+
+nrow(used_in_htcondor)
 
 contigs_with_crispr <- read.table("Data/contigs_with_crispr_clean.txt", sep="\t", header=FALSE)
 
