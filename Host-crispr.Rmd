@@ -1,0 +1,219 @@
+---
+title: "greA host crispr"
+author: "Patricia Tran"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Load the cctyper output data
+
+```{r}
+library(tidyverse)
+library(readxl)
+
+results <- read_tsv("Data/all_cas_operons.tab") %>% filter(Contig != "Contig")
+
+dim(results)
+
+#write(results$Contig, "Data/contigs_with_crispr.txt")
+# Send that to chtc, and make the output file.
+
+results %>% group_by(Prediction) %>% tally() %>% 
+  ggplot(aes(y=n, x=Prediction)) +
+  geom_col()+
+  theme_classic()+
+  labs(y = "Count")+
+  theme(axis.text.x = element_text(angle=90))
+
+taxonomy <- read_tsv("Data/all_genomes_noDuplicates.tsv")
+
+
+contigs_with_crispr <- read.table("Data/contigs_with_crispr_clean.txt", sep="\t", header=FALSE)
+
+colnames(results)
+
+colnames(contigs_with_crispr) <- colnames(results)
+
+contigs_with_crispr <- contigs_with_crispr %>% separate(Contig, into = c("Folder","Contig"), sep="/")
+
+contigs_with_crispr$Contig <- str_replace(contigs_with_crispr$Contig, "cas_operons.tab:","")
+
+contigs_with_crispr$Folder <- str_replace(contigs_with_crispr$Folder, "my_output_","")
+
+contigs_with_crispr$accession <- contigs_with_crispr$Folder
+
+# Remove everything after the 2nd underscore, including it
+contigs_with_crispr$accession  <- str_replace(contigs_with_crispr$accession, "^([^_]+_[^_]+)_.*","\\1")
+
+
+
+contigs_with_crispr <- left_join(contigs_with_crispr, taxonomy)
+
+
+
+
+
+contigs_with_crispr <- contigs_with_crispr %>% separate(gtdb_taxonomy, sep="; ", into=c("Domain","Phylum","Class","Order","Family","Genus","Species"))
+
+
+contigs_with_crispr %>% distinct() %>% nrow()
+
+unique(contigs_with_crispr$accession) %>% length()
+
+# Taxonomic distribution of the MAGs:
+
+write.table(x= contigs_with_crispr, file="Output/contigs_with_crispr.tsv", sep="\t", row.names=FALSE)
+```
+
+
+# Summarize family level all the data.
+```{R}
+
+genomes_with_crispr_count <- contigs_with_crispr %>% mutate(PCOF= paste(Phylum, Class, Order, Family)) %>% select(accession, Prediction, PCOF) %>% distinct() %>% group_by(Prediction, PCOF) %>% tally()
+
+colnames(genomes_with_crispr_count)[3] <- "genomes_with_crispr"
+
+
+
+genomes_all_count <- taxonomy %>% filter(gtdb_species_representative == TRUE) %>%
+  separate(gtdb_taxonomy, sep="; ", into=c("Domain","Phylum","Class","Order","Family","Genus","Species")) %>%
+  mutate(PCOF= paste(Phylum, Class, Order, Family)) %>% 
+  select(accession,PCOF) %>%
+  group_by(PCOF) %>% tally()
+
+colnames(genomes_all_count)[2] <- "total_genomes"
+
+
+genomes_count <- full_join(genomes_all_count, genomes_with_crispr_count)
+
+genomes_count <- genomes_count %>% mutate(percentage = genomes_with_crispr/total_genomes)
+
+ggplot(genomes_count %>% filter(Prediction != "NA"), aes(x=Prediction, y=PCOF, col = percentage, fill=percentage))+
+  geom_tile()+
+  scale_color_distiller(palette = "Spectral")+
+  scale_fill_distiller(palette = "Spectral")+
+  theme(axis.text.x = element_text(angle = 90))+
+  theme(
+    panel.background = element_rect(fill = "#F5F2F2", color = "black")
+  )
+
+
+#ggsave("figures/greA/family_level_summary.pdf", width = 11, height = 8)
+```
+
+# Genus only plot
+```{r}
+
+genus_only <- c("g__Ketogulonicigenium",
+                "g__Paenibacillus",
+                "g__GPS1B09",
+                "g__Anaerovibrio",
+                "g__Faecalibacterium",
+                "g__Agathobacter",
+                "g__Methylomonas",
+                "g__Methylobacterium",
+                "g__Muiribacterium","g__Muriicola","g__Defluviilinea","g__Flavonifractor","g__Herbinix","g__Pseudomonas")
+
+# Subset all the genus in the excel sheet:genus_only
+
+contigs_with_crispr_genus <- contigs_with_crispr %>% filter(Genus %in% genus_only)
+
+length(unique(contigs_with_crispr_genus$accession))
+
+
+taxonomy %>% filter(gtdb_species_representative == TRUE) %>% filter(
+)
+
+
+# Summarize the data at the genus level.
+genomes_with_crispr_count_genus <- contigs_with_crispr %>% mutate(PG = paste(Phylum, Genus)) %>% filter(Genus %in% genus_only) %>%
+  select(accession, Prediction, PG) %>% distinct() %>% group_by(Prediction, PG) %>% tally()
+
+colnames(genomes_with_crispr_count_genus)[3] <- "genomes_with_crispr"
+
+
+genomes_all_count_genus <- taxonomy %>% filter(gtdb_species_representative == TRUE) %>%
+  separate(gtdb_taxonomy, sep="; ", into=c("Domain","Phylum","Class","Order","Family","Genus","Species")) %>%
+  mutate(PG = paste(Phylum, Genus)) %>% 
+  filter(Genus %in% genus_only) %>%
+  select(accession,PG) %>%
+  group_by(PG) %>% tally()
+
+colnames(genomes_all_count_genus)[2] <- "total_genomes"
+
+
+genomes_count_genus <- full_join(genomes_all_count_genus, genomes_with_crispr_count_genus)
+
+genomes_count_genus <- genomes_count_genus %>% mutate(percentage = genomes_with_crispr/total_genomes)
+
+write.table(genomes_count_genus, file = "Output/genus_count_table.tsv",sep="\t", row.names = FALSE)
+
+heatmap_genus <- ggplot(genomes_count_genus %>% filter(Prediction != "NA"), aes(x=Prediction, y=PG, col = percentage, fill=percentage))+
+  geom_tile()+
+  scale_color_distiller(name = "Fraction", palette = "Spectral")+
+  scale_fill_distiller(name = "Fraction", palette = "Spectral")+
+  theme(axis.text.x = element_text(angle = 90))+
+  theme(
+    text = element_text(color="black"),
+    axis.text = element_text(color = "black"),
+    axis.text.y = element_text(color = "black"),
+    axis.title = element_text(color = "black"),
+    panel.background = element_rect(fill = "#F5F2F2", color = "black"),
+    legend.position = "bottom"
+  )
+
+heatmap_genus
+
+library(forcats)
+
+bar_genus <- ggplot(
+  genomes_count_genus %>% 
+    filter(!is.na(Prediction)) %>% 
+    select(PG, genomes_with_crispr, total_genomes) %>% 
+    gather("type", "count", genomes_with_crispr, total_genomes) %>% 
+    group_by(PG, type) %>%
+    summarize(sum_count = sum(count), .groups = "drop"),
+  
+  aes(x = sum_count, y = PG, fill = fct_rev(type))) + 
+  geom_col(position = position_dodge(width = 0.9)) +
+  geom_text(
+    aes(label = sum_count),
+    position = position_dodge(width = 0.9),
+    hjust = -0.2,
+    size = 3.5
+  ) +
+  scale_x_continuous(expand = expansion(mult = c(0, 0.15))) +
+  scale_fill_manual(values=c("genomes_with_crispr"="#93193a",
+                              "total_genomes"="#2f3794")) +
+  theme(
+    text = element_text(color="black"),
+    axis.text = element_text(color = "black"),
+    axis.text.y = element_text(color = "black"),
+    axis.title = element_text(color = "black"),
+    panel.grid.major.x = element_blank(),
+    panel.grid = element_blank(),
+    panel.background = element_rect(fill = "white", color = "white"),
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank()
+    #legend.position = "none"
+  ) +
+  xlab("Genome count")
+
+bar_genus
+
+library(ggpubr)
+
+ggarrange(heatmap_genus, bar_genus, align = "h")
+bar_genus_minimal <- bar_genus + theme(axis.text.y = element_blank(), axis.title.y = element_blank(), legend.position="none")
+
+ggarrange(heatmap_genus, bar_genus_minimal, align = "h", widths = c(1,0.5))
+
+ggsave(filename = "Output/heatmap_barplot_genus_level_summary.pdf", 
+       width = 8.5, 
+       height = 4)
+
+```
