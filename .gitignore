@@ -4,3 +4,5 @@
 .Ruserdata
 .positai
 Output/*
+.DS_Store
+Scripts/x*
