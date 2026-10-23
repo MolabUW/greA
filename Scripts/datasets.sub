@@ -22,8 +22,8 @@ request_disk = 20GB
 
 max_retries = 5
  
-queue accessions from (
-	xah
-)  
+#queue accessions from (
+#	xaa
+#)  
 
-#queue accessions from accessions_list.txt
+queue accessions from accessions_list.txt

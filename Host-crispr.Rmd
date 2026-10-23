@@ -67,8 +67,6 @@ write.table(x= all_gtdb_raw_unique_good_qual_filtered %>% distinct(), file="Outp
 write.table(x=unique(all_gtdb_raw_unique_good_qual_filtered$accession), file="Output/accessions.txt", row.names = FALSE, col.names = FALSE, quote = FALSE)
 
 length(unique(all_gtdb_raw_unique_good_qual_filtered$accession))
-
-
 ```
 
 There are 16 308 genomes to be accessed.
