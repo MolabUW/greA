@@ -61,7 +61,7 @@ all_gtdb_raw_unique_good_qual_filtered  %>% group_by(gtdb_species_representative
   tally()
 
 # The first column of that table is what I want to use for the HTCondor code.
-write.table(x= all_gtdb_raw_unique_good_qual_filtered, file="Output/all_gtdb_raw_unique_good_qual_filtered.tsv", sep="\t", row.names=FALSE)
+write.table(x= all_gtdb_raw_unique_good_qual_filtered %>% distinct(), file="Output/all_gtdb_raw_unique_good_qual_filtered.tsv", sep="\t", row.names=FALSE)
 
 # Use the first column as the "accessions.txt" file for HTCondor:
 write.table(x=unique(all_gtdb_raw_unique_good_qual_filtered$accession), file="Output/accessions.txt", row.names = FALSE, col.names = FALSE, quote = FALSE)
