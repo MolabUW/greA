@@ -141,9 +141,6 @@ results <- read_tsv("Data/all_cas_operons.tab") %>% filter(Contig != "Contig")
 
 dim(results)
 
-#write(results$Contig, "Data/contigs_with_crispr.txt")
-# Send that to chtc, and make the output file.
-
 results %>% group_by(Prediction) %>% tally() %>% 
   ggplot(aes(y=n, x=Prediction)) +
   geom_col()+
@@ -194,7 +191,7 @@ contigs_with_crispr %>% distinct() %>% nrow()
 
 unique(contigs_with_crispr$accession) %>% length()
 
-# Taxonomic distribution of the MAGs:
+# Taxonomic distribution of the CRISPR results (all of them)
 
 write.table(x= contigs_with_crispr, file="Output/contigs_with_crispr.tsv", sep="\t", row.names=FALSE)
 
