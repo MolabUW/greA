@@ -9,6 +9,130 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+# Create the accessions data list:
+
+```{r}
+library(tidyverse)
+
+all_gtdb_raw <- read.table("/Users/ptran5/Downloads/genomes-greA/all_gtdb_tables/all_clean_accessions.txt", sep="\t",comment = "", header=TRUE)
+
+all_gtdb_raw_unique <- all_gtdb_raw %>% distinct()
+
+old_accessions <- read.table("/Users/ptran5/Downloads/genomes-greA/all_gtdb_tables/unique_to_old_accessions.txt")
+
+new_accessions <- read.table("/Users/ptran5/Downloads/genomes-greA/all_gtdb_tables/unique_to_new_accessions.txt")
+
+#view(all_gtdb_raw_unique %>% filter(accession %in% old_accessions$V1))
+#view(all_gtdb_raw_unique %>% filter(accession %in% new_accessions$V1))
+
+# Count how many have failed quality check:
+
+all_gtdb_raw_unique %>% filter(grepl("Failed Quality Check", gtdb_taxonomy)) %>% nrow()
+#14,338
+view(all_gtdb_raw_unique%>% filter(grepl("Failed Quality Check", gtdb_taxonomy)))
+
+# Keep only good quality check:
+#View(all_gtdb_raw_unique%>% filter(!grepl("Failed Quality Check", gtdb_taxonomy)))
+all_gtdb_raw_unique_good_qual <- all_gtdb_raw_unique %>% filter(!grepl("Failed Quality Check", gtdb_taxonomy))
+#123,329
+
+all_gtdb_raw_unique_good_qual %>% group_by(gtdb_species_representative, ncbi_type_material) %>% tally()
+# Okay so some are upper case and lower case but we really need to put everything in upper case AND convert to a factor so it's properly managed with the filter.
+
+all_gtdb_raw_unique_good_qual$gtdb_species_representative <- toupper(all_gtdb_raw_unique_good_qual$gtdb_species_representative)
+
+all_gtdb_raw_unique_good_qual$ncbi_type_material <- toupper(all_gtdb_raw_unique_good_qual$ncbi_type_material)
+
+# Reassess the tally:
+all_gtdb_raw_unique_good_qual %>% group_by(gtdb_species_representative, ncbi_type_material) %>% tally()
+
+# The expected number of rows after filtering.
+558+14556+1277
+
+# The majority of these (106338) are neither gtdb or ncbi type material so we will not analyse them.
+# But it might be good to analyse the ncbi type material even if they are not GTDB species representative.
+
+# For the HTCondor list, I'll use:
+# Not the parenthesis:
+all_gtdb_raw_unique_good_qual_filtered <- all_gtdb_raw_unique_good_qual %>%
+  filter(!(gtdb_species_representative == FALSE & ncbi_type_material == FALSE))
+
+all_gtdb_raw_unique_good_qual_filtered  %>% group_by(gtdb_species_representative, ncbi_type_material) %>% 
+  tally()
+
+# The first column of that table is what I want to use for the HTCondor code.
+write.table(x= all_gtdb_raw_unique_good_qual_filtered, file="Output/all_gtdb_raw_unique_good_qual_filtered.tsv", sep="\t", row.names=FALSE)
+
+# Use the first column as the "accessions.txt" file for HTCondor:
+write.table(x=unique(all_gtdb_raw_unique_good_qual_filtered$accession), file="Output/accessions.txt", row.names = FALSE, col.names = FALSE, quote = FALSE)
+
+length(unique(all_gtdb_raw_unique_good_qual_filtered$accession))
+
+
+```
+
+There are 16 308 genomes to be accessed.
+
+
+# See the file Methods.md for how to use accessions.txt to download from ncbi + run cctyper.
+
+In summary:
+
+```
+# Transfer files from laptop to chtc
+scp accessions.txt ptran5@ap2002.chtc.wisc.edu:~/all/researchers/angel/.
+
+# log into chtc and cd into wd
+cd ~/all/researchers/angel/.
+# split the accessions.txt id
+split -l 1000 accessions.txt
+ls x* > accessions_list.txt
+
+# Make the output directory in my staging folder
+mkdir -p /staging/p/ptran5/data/ncbi_dataset/data
+
+# submit datasets.sub script
+condor_submit datasets.sub
+
+# Watch job until it finishes...
+
+# Once it's done, summarize the downloaded accessions
+ls /staging/p/ptran5/data/ncbi_dataset/data/G* > ~/all/researchers/angel/accessions1.txt
+cd ~/all/researchers/angel/
+
+# Clean up the names
+grep '/staging/p/ptran5/data/ncbi_dataset/data/' accessions1.txt | wc -l
+
+grep '/staging/p/ptran5/data/ncbi_dataset/data/' accessions1.txt > accessions2.txt
+
+# Remove full path
+sed -i 's|/staging/p/ptran5/data/ncbi_dataset/data/||g' accessions2.txt 
+
+sed -i 's|:||g' accessions2.txt
+
+head -n 3 accessions2.txt > accessions2_test.txt
+
+# accessions2_test.txt can be used for the queue statement of cctyper.sub 
+
+# submit the cctyper job 
+condor_submit cctyper.sub
+
+# Watch until it finishes
+cd /staging/p/ptran5/cctyper_out
+
+# Go to staging and unzip results:
+count=1
+for file in *tar.gz; do 
+  tar xf $file
+  echo "Count is: $count"
+  ((count++))
+done
+
+# Summarize the results:
+ls **/cas_operons.tab | wc -l
+```
+
+
 # Load the cctyper output data
 
 ```{r}
@@ -29,16 +153,21 @@ results %>% group_by(Prediction) %>% tally() %>%
   labs(y = "Count")+
   theme(axis.text.x = element_text(angle=90))
 
-taxonomy <- read_tsv("Data/all_genomes_noDuplicates.tsv")
+taxonomy <- all_gtdb_raw_unique_good_qual_filtered %>% distinct()
 
-used_in_htcondor <- taxonomy %>% filter(gtdb_species_representative == TRUE)
+#used_in_htcondor <- taxonomy %>% filter(gtdb_species_representative == TRUE)
+#nrow(used_in_htcondor)
 
-write.table(x= used_in_htcondor, file="Output/accessions_used_for_cctyper.txt", sep="\t", row.names=FALSE)
+#write.table(x= used_in_htcondor, file="Output/accessions_used_for_cctyper.txt", sep="\t", row.names=FALSE)
 
+# From the results file, create a file named `contigs_with_crispr.txt` that is made up of all the Contig ID :
 
-nrow(used_in_htcondor)
+write(x=unique(results$Contig), file="Data/contigs_with_crispr.txt")
+
+#nrow(used_in_htcondor)
 
 contigs_with_crispr <- read.table("Data/contigs_with_crispr_clean.txt", sep="\t", header=FALSE)
+nrow(contigs_with_crispr)
 
 colnames(results)
 
@@ -57,7 +186,10 @@ contigs_with_crispr$accession  <- str_replace(contigs_with_crispr$accession, "^(
 
 contigs_with_crispr <- left_join(contigs_with_crispr, taxonomy)
 
-contigs_with_crispr <- contigs_with_crispr %>% separate(gtdb_taxonomy, sep="; ", into=c("Domain","Phylum","Class","Order","Family","Genus","Species"))
+nrow(contigs_with_crispr)
+
+contigs_with_crispr <- contigs_with_crispr %>% separate(gtdb_taxonomy, sep="; ", into=c("Domain","Phylum","Class","Order","Family","Genus","Species")) %>%
+    separate(ncbi_taxonomy, sep="; ", into=c("Domain_ncbi","Phylum_ncbi","Class_ncbi","Order_ncbi","Family_ncbi","Genus_ncbi","Species_ncbi")) 
 
 
 contigs_with_crispr %>% distinct() %>% nrow()
@@ -70,14 +202,36 @@ write.table(x= contigs_with_crispr, file="Output/contigs_with_crispr.tsv", sep="
 
 # Comparison of how many genomes were queried vs. how many had positive results.
 
-nrow(used_in_htcondor)
-nrow(contigs_with_crispr)
+# How many accessesions searched:
+length(unique(all_gtdb_raw_unique_good_qual_filtered$accession))
+# 16308
 
+# wc -l accessions2.txt
+#16294 accessions2.txt
+accessions_actually_downloaded <- read_table("Data/accessions2.txt", col_names = FALSE)
+nrow(accessions_actually_downloaded)
+
+#Difference:
+length(unique(all_gtdb_raw_unique_good_qual_filtered$accession))-nrow(accessions_actually_downloaded)
+
+list1 <- unique(all_gtdb_raw_unique_good_qual_filtered$accession)
+list2 <- accessions_actually_downloaded$X1
+
+
+setdiff(list1,list2)
+
+#There are 14 genomes we don't have data for...
+# Search those in the raw GTDB data
+
+all_gtdb_raw %>% filter(accession %in% setdiff(list1,list2))
+
+# How many files we have data for (ncbi_datasets/data)
+nrow(contigs_with_crispr)
 ```
 
 
 # Summarize family level all the data.
-```{R}
+```{R, eval=FALSE}
 
 genomes_with_crispr_count <- contigs_with_crispr %>% mutate(PCOF= paste(Phylum, Class, Order, Family)) %>% select(accession, Prediction, PCOF) %>% distinct() %>% group_by(Prediction, PCOF) %>% tally()
 
@@ -87,7 +241,8 @@ colnames(genomes_with_crispr_count)[3] <- "genomes_with_crispr"
 
 genomes_all_count <- taxonomy %>% filter(gtdb_species_representative == TRUE) %>%
   separate(gtdb_taxonomy, sep="; ", into=c("Domain","Phylum","Class","Order","Family","Genus","Species")) %>%
-  mutate(PCOF= paste(Phylum, Class, Order, Family)) %>% 
+  separate(ncbi_taxonomy, sep="; ", into=c("Domain_ncbi","Phylum_ncbi","Class_ncbi","Order_ncbi","Family_ncbi","Genus_ncbi","Species_ncbi")) %>%
+ mutate(PCOF= paste(Phylum, Class, Order, Family)) %>% 
   select(accession,PCOF) %>%
   group_by(PCOF) %>% tally()
 
@@ -119,24 +274,26 @@ genus_only <- c("g__Ketogulonicigenium",
                 "g__GPS1B09",
                 "g__Anaerovibrio",
                 "g__Faecalibacterium",
-                "g__Agathobacter",
+                "g__Agathobacter", # g__Roseburia or
                 "g__Methylomonas",
                 "g__Methylobacterium",
-                "g__Muiribacterium","g__Muriicola","g__Defluviilinea","g__Flavonifractor","g__Herbinix","g__Pseudomonas")
+                "g__Muiribacterium", #--> not there
+                "g__Muriicola", #--> none in results
+                "g__Defluviilinea", #--> none in results
+                "g__Flavonifractor",
+                "g__Herbinix",
+                "g__Pseudomonas")
 
-# Subset all the genus in the excel sheet:genus_only
-
-contigs_with_crispr_genus <- contigs_with_crispr %>% filter(Genus %in% genus_only)
+contigs_with_crispr_genus_gtdb <- contigs_with_crispr %>% filter(Genus %in% genus_only)
+contigs_with_crispr_genus_ncbi <- contigs_with_crispr %>% filter(Genus_ncbi %in% genus_only)
+contigs_with_crispr_genus <- rbind(contigs_with_crispr_genus_ncbi, contigs_with_crispr_genus_gtdb)
 
 length(unique(contigs_with_crispr_genus$accession))
 
-
-taxonomy %>% filter(gtdb_species_representative == TRUE) %>% filter(
-)
-
+# there are 168 genomes belonging to these groups.
 
 # Summarize the data at the genus level.
-genomes_with_crispr_count_genus <- contigs_with_crispr %>% mutate(PG = paste(Phylum, Genus)) %>% filter(Genus %in% genus_only) %>%
+genomes_with_crispr_count_genus <- contigs_with_crispr %>% mutate(PG = paste(Phylum, "(GTDB:", Genus, "; NCBI:", Genus_ncbi,")")) %>% filter(Genus %in% genus_only) %>%
   select(accession, Prediction, PG) %>% distinct() %>% group_by(Prediction, PG) %>% tally()
 
 colnames(genomes_with_crispr_count_genus)[3] <- "genomes_with_crispr"
@@ -144,8 +301,9 @@ colnames(genomes_with_crispr_count_genus)[3] <- "genomes_with_crispr"
 
 genomes_all_count_genus <- taxonomy %>% filter(gtdb_species_representative == TRUE) %>%
   separate(gtdb_taxonomy, sep="; ", into=c("Domain","Phylum","Class","Order","Family","Genus","Species")) %>%
-  mutate(PG = paste(Phylum, Genus)) %>% 
-  filter(Genus %in% genus_only) %>%
+  separate(ncbi_taxonomy, sep="; ", into=c("Domain_ncbi","Phylum_ncbi","Class_ncbi","Order_ncbi","Family_ncbi","Genus_ncbi","Species_ncbi")) %>%
+  mutate(PG = paste(Phylum, "(GTDB:", Genus, "; NCBI:", Genus_ncbi,")")) %>% 
+  filter(Genus %in% genus_only | Genus_ncbi %in% genus_only) %>%
   select(accession,PG) %>%
   group_by(PG) %>% tally()
 
@@ -162,9 +320,9 @@ heatmap_genus <- ggplot(genomes_count_genus %>% filter(Prediction != "NA"), aes(
   geom_tile()+
   scale_color_distiller(name = "Fraction", palette = "Spectral")+
   scale_fill_distiller(name = "Fraction", palette = "Spectral")+
-  theme(axis.text.x = element_text(angle = 90))+
   theme(
-    text = element_text(color="black"),
+    axis.text.x = element_text(angle = 90, hjust=1),
+    text = element_text(color="black", size=9),
     axis.text = element_text(color = "black"),
     axis.text.y = element_text(color = "black"),
     axis.title = element_text(color = "black"),
@@ -190,13 +348,13 @@ bar_genus <- ggplot(
     aes(label = sum_count),
     position = position_dodge(width = 0.9),
     hjust = -0.2,
-    size = 3.5
+    size = 2
   ) +
   scale_x_continuous(expand = expansion(mult = c(0, 0.15))) +
   scale_fill_manual(values=c("genomes_with_crispr"="#93193a",
                               "total_genomes"="#2f3794")) +
   theme(
-    text = element_text(color="black"),
+    text = element_text(color="black", size=9),
     axis.text = element_text(color = "black"),
     axis.text.y = element_text(color = "black"),
     axis.title = element_text(color = "black"),

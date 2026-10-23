@@ -1,39 +1,163 @@
 "PG"	"total_genomes"	"Prediction"	"genomes_with_crispr"	"percentage"
-"p__Bacillota g__Anaerovibrio"	25	"Hybrid(I-C,III-A)"	1	0.04
-"p__Bacillota g__Anaerovibrio"	25	"I-C"	1	0.04
-"p__Bacillota g__Anaerovibrio"	25	"I-F"	1	0.04
-"p__Bacillota g__Anaerovibrio"	25	"II-A"	1	0.04
-"p__Bacillota g__Anaerovibrio"	25	"III-A"	2	0.08
-"p__Bacillota g__Anaerovibrio"	25	"III-B"	1	0.04
-"p__Bacillota g__Anaerovibrio"	25	"III-D"	5	0.2
-"p__Bacillota g__Anaerovibrio"	25	"V-A"	2	0.08
-"p__Bacillota g__Faecalibacterium"	91	"I-C"	7	0.0769230769230769
-"p__Bacillota g__Faecalibacterium"	91	"I-E"	9	0.0989010989010989
-"p__Bacillota g__Faecalibacterium"	91	"III-A"	5	0.0549450549450549
-"p__Bacillota g__Flavonifractor"	24	"I-C"	3	0.125
-"p__Bacillota g__Flavonifractor"	24	"I-E"	2	0.0833333333333333
-"p__Bacillota g__Flavonifractor"	24	"III-A"	1	0.0416666666666667
-"p__Bacillota g__GPS1B09"	4	"I-A"	1	0.25
-"p__Bacillota g__GPS1B09"	4	"I-B"	1	0.25
-"p__Bacillota g__GPS1B09"	4	"I-C"	3	0.75
-"p__Bacillota g__GPS1B09"	4	"I-E"	1	0.25
-"p__Bacillota g__GPS1B09"	4	"II-D"	1	0.25
-"p__Bacillota g__GPS1B09"	4	"III-A"	1	0.25
-"p__Bacillota g__GPS1B09"	4	"III-D"	1	0.25
-"p__Bacillota g__Paenibacillus"	93	"Hybrid(I-C,III-B)"	1	0.010752688172043
-"p__Bacillota g__Paenibacillus"	93	"Hybrid(I-C,III-D)"	2	0.021505376344086
-"p__Bacillota g__Paenibacillus"	93	"I-B"	3	0.032258064516129
-"p__Bacillota g__Paenibacillus"	93	"I-C"	34	0.365591397849462
-"p__Bacillota g__Paenibacillus"	93	"III-A"	1	0.010752688172043
-"p__Bacillota g__Paenibacillus"	93	"III-B"	3	0.032258064516129
-"p__Bacteroidota g__Muriicola"	22	NA	NA	NA
-"p__Chloroflexota g__Defluviilinea"	1	NA	NA	NA
-"p__Muiribacteriota g__Muiribacterium"	1	NA	NA	NA
-"p__Pseudomonadota g__Ketogulonicigenium"	2	"I-C"	1	0.5
-"p__Pseudomonadota g__Methylobacterium"	146	"I-C"	13	0.089041095890411
-"p__Pseudomonadota g__Methylobacterium"	146	"I-E"	17	0.116438356164384
-"p__Pseudomonadota g__Methylobacterium"	146	"V-B1"	1	0.00684931506849315
-"p__Pseudomonadota g__Methylobacterium"	146	"V-M"	7	0.047945205479452
-"p__Pseudomonadota g__Methylomonas"	1	"I-E"	1	1
-"p__Pseudomonadota g__Methylomonas"	1	"I-F"	1	1
-"p__Pseudomonadota g__Methylomonas"	1	"III-A"	1	1
+"p__Actinomycetota (GTDB: g__Collinsella ; NCBI: g__Faecalibacterium )"	1	NA	NA	NA
+"p__Actinomycetota (GTDB: g__Microcella ; NCBI: g__Pseudomonas )"	1	NA	NA	NA
+"p__Actinomycetota (GTDB: g__W2P13-069 ; NCBI: g__Agathobacter )"	1	NA	NA	NA
+"p__Bacillota (GTDB: g__Alectryocaccobium ; NCBI: g__Faecalibacterium )"	1	NA	NA	NA
+"p__Bacillota (GTDB: g__Anaerovibrio ; NCBI: g__ )"	3	"Hybrid(I-C,III-A)"	1	0.333333333333333
+"p__Bacillota (GTDB: g__Anaerovibrio ; NCBI: g__ )"	3	"I-F"	1	0.333333333333333
+"p__Bacillota (GTDB: g__Anaerovibrio ; NCBI: g__ )"	3	"III-D"	1	0.333333333333333
+"p__Bacillota (GTDB: g__Anaerovibrio ; NCBI: g__Anaerotignum )"	1	NA	NA	NA
+"p__Bacillota (GTDB: g__Anaerovibrio ; NCBI: g__Anaerovibrio )"	21	"I-C"	1	0.0476190476190476
+"p__Bacillota (GTDB: g__Anaerovibrio ; NCBI: g__Anaerovibrio )"	21	"II-A"	1	0.0476190476190476
+"p__Bacillota (GTDB: g__Anaerovibrio ; NCBI: g__Anaerovibrio )"	21	"III-A"	2	0.0952380952380952
+"p__Bacillota (GTDB: g__Anaerovibrio ; NCBI: g__Anaerovibrio )"	21	"III-B"	1	0.0476190476190476
+"p__Bacillota (GTDB: g__Anaerovibrio ; NCBI: g__Anaerovibrio )"	21	"III-D"	4	0.19047619047619
+"p__Bacillota (GTDB: g__Anaerovibrio ; NCBI: g__Anaerovibrio )"	21	"V-A"	2	0.0952380952380952
+"p__Bacillota (GTDB: g__CAG-1138 ; NCBI: g__Faecalibacterium )"	2	NA	NA	NA
+"p__Bacillota (GTDB: g__CAG-177 ; NCBI: g__Faecalibacterium )"	1	NA	NA	NA
+"p__Bacillota (GTDB: g__CAG-217 ; NCBI: g__Agathobacter )"	1	NA	NA	NA
+"p__Bacillota (GTDB: g__CAG-791 ; NCBI: g__Anaerovibrio )"	1	NA	NA	NA
+"p__Bacillota (GTDB: g__CAMCVV01 ; NCBI: g__Paenibacillus )"	1	NA	NA	NA
+"p__Bacillota (GTDB: g__CANAAV01 ; NCBI: g__Flavonifractor )"	3	NA	NA	NA
+"p__Bacillota (GTDB: g__CAVALG01 ; NCBI: g__Agathobacter )"	1	NA	NA	NA
+"p__Bacillota (GTDB: g__CAVDRM01 ; NCBI: g__Anaerovibrio )"	1	NA	NA	NA
+"p__Bacillota (GTDB: g__CAYJAY01 ; NCBI: g__Faecalibacterium )"	1	NA	NA	NA
+"p__Bacillota (GTDB: g__COE1 ; NCBI: g__Agathobacter )"	1	NA	NA	NA
+"p__Bacillota (GTDB: g__Cytobacillus ; NCBI: g__Pseudomonas )"	1	NA	NA	NA
+"p__Bacillota (GTDB: g__Darwinimomas ; NCBI: g__Agathobacter )"	1	NA	NA	NA
+"p__Bacillota (GTDB: g__Dialister ; NCBI: g__Agathobacter )"	1	NA	NA	NA
+"p__Bacillota (GTDB: g__Enterenecus ; NCBI: g__Anaerovibrio )"	1	NA	NA	NA
+"p__Bacillota (GTDB: g__Faecalibacterium ; NCBI: g__ )"	7	"I-E"	1	0.142857142857143
+"p__Bacillota (GTDB: g__Faecalibacterium ; NCBI: g__Bacteroides )"	2	NA	NA	NA
+"p__Bacillota (GTDB: g__Faecalibacterium ; NCBI: g__Barnesiella )"	1	NA	NA	NA
+"p__Bacillota (GTDB: g__Faecalibacterium ; NCBI: g__Eubacterium )"	1	NA	NA	NA
+"p__Bacillota (GTDB: g__Faecalibacterium ; NCBI: g__Faecalibacterium )"	78	"I-C"	7	0.0897435897435897
+"p__Bacillota (GTDB: g__Faecalibacterium ; NCBI: g__Faecalibacterium )"	78	"I-E"	12	0.153846153846154
+"p__Bacillota (GTDB: g__Faecalibacterium ; NCBI: g__Faecalibacterium )"	78	"III-A"	7	0.0897435897435897
+"p__Bacillota (GTDB: g__Faecalibacterium ; NCBI: g__Lawsonibacter )"	1	NA	NA	NA
+"p__Bacillota (GTDB: g__Faecalibacterium ; NCBI: g__Oxalobacter )"	1	NA	NA	NA
+"p__Bacillota (GTDB: g__Flavonifractor ; NCBI: g__ )"	1	NA	NA	NA
+"p__Bacillota (GTDB: g__Flavonifractor ; NCBI: g__Flavonifractor )"	21	"I-C"	4	0.19047619047619
+"p__Bacillota (GTDB: g__Flavonifractor ; NCBI: g__Flavonifractor )"	21	"I-E"	2	0.0952380952380952
+"p__Bacillota (GTDB: g__Flavonifractor ; NCBI: g__Intestinimonas )"	1	NA	NA	NA
+"p__Bacillota (GTDB: g__Flavonifractor ; NCBI: g__Pseudoflavonifractor )"	1	"III-A"	1	1
+"p__Bacillota (GTDB: g__Fontibacillus ; NCBI: g__Paenibacillus )"	40	NA	NA	NA
+"p__Bacillota (GTDB: g__GPS1B09 ; NCBI: g__ )"	1	"I-A"	1	1
+"p__Bacillota (GTDB: g__GPS1B09 ; NCBI: g__ )"	1	"I-B"	1	1
+"p__Bacillota (GTDB: g__GPS1B09 ; NCBI: g__ )"	1	"I-E"	1	1
+"p__Bacillota (GTDB: g__GPS1B09 ; NCBI: g__ )"	1	"II-D"	1	1
+"p__Bacillota (GTDB: g__GPS1B09 ; NCBI: g__ )"	1	"III-A"	1	1
+"p__Bacillota (GTDB: g__GPS1B09 ; NCBI: g__ )"	1	"III-D"	1	1
+"p__Bacillota (GTDB: g__GPS1B09 ; NCBI: g__Clostridium )"	1	"I-C"	1	1
+"p__Bacillota (GTDB: g__GPS1B09 ; NCBI: g__Dethiobacter )"	2	"I-C"	2	1
+"p__Bacillota (GTDB: g__Gemmiger ; NCBI: g__Faecalibacterium )"	2	NA	NA	NA
+"p__Bacillota (GTDB: g__Gordoniibacillus ; NCBI: g__Paenibacillus )"	1	NA	NA	NA
+"p__Bacillota (GTDB: g__HGM12998 ; NCBI: g__Flavonifractor )"	1	NA	NA	NA
+"p__Bacillota (GTDB: g__HGM13233 ; NCBI: g__Faecalibacterium )"	2	NA	NA	NA
+"p__Bacillota (GTDB: g__Lawsonibacter ; NCBI: g__Flavonifractor )"	1	NA	NA	NA
+"p__Bacillota (GTDB: g__Mobilitalea ; NCBI: g__Herbinix )"	16	NA	NA	NA
+"p__Bacillota (GTDB: g__Paenibacillus ; NCBI: g__Neobacillus )"	1	NA	NA	NA
+"p__Bacillota (GTDB: g__Paenibacillus ; NCBI: g__Paenibacillus )"	91	"Hybrid(I-C,III-B)"	1	0.010989010989011
+"p__Bacillota (GTDB: g__Paenibacillus ; NCBI: g__Paenibacillus )"	91	"Hybrid(I-C,III-D)"	2	0.021978021978022
+"p__Bacillota (GTDB: g__Paenibacillus ; NCBI: g__Paenibacillus )"	91	"I-B"	3	0.032967032967033
+"p__Bacillota (GTDB: g__Paenibacillus ; NCBI: g__Paenibacillus )"	91	"I-C"	37	0.406593406593407
+"p__Bacillota (GTDB: g__Paenibacillus ; NCBI: g__Paenibacillus )"	91	"III-A"	1	0.010989010989011
+"p__Bacillota (GTDB: g__Paenibacillus ; NCBI: g__Paenibacillus )"	91	"III-B"	5	0.0549450549450549
+"p__Bacillota (GTDB: g__Paenibacillus ; NCBI: g__Priestia )"	1	NA	NA	NA
+"p__Bacillota (GTDB: g__Paenibacillus_AA ; NCBI: g__Paenibacillus )"	3	NA	NA	NA
+"p__Bacillota (GTDB: g__Paenibacillus_AB ; NCBI: g__Paenibacillus )"	7	NA	NA	NA
+"p__Bacillota (GTDB: g__Paenibacillus_AC ; NCBI: g__Paenibacillus )"	1	NA	NA	NA
+"p__Bacillota (GTDB: g__Paenibacillus_AE ; NCBI: g__Paenibacillus )"	7	NA	NA	NA
+"p__Bacillota (GTDB: g__Paenibacillus_AF ; NCBI: g__Paenibacillus )"	2	NA	NA	NA
+"p__Bacillota (GTDB: g__Paenibacillus_AG ; NCBI: g__Paenibacillus )"	1	NA	NA	NA
+"p__Bacillota (GTDB: g__Paenibacillus_AH ; NCBI: g__Paenibacillus )"	1	NA	NA	NA
+"p__Bacillota (GTDB: g__Paenibacillus_AI ; NCBI: g__Paenibacillus )"	2	NA	NA	NA
+"p__Bacillota (GTDB: g__Paenibacillus_AK ; NCBI: g__Paenibacillus )"	2	NA	NA	NA
+"p__Bacillota (GTDB: g__Paenibacillus_AL ; NCBI: g__Paenibacillus )"	1	NA	NA	NA
+"p__Bacillota (GTDB: g__Paenibacillus_AM ; NCBI: g__Paenibacillus )"	3	NA	NA	NA
+"p__Bacillota (GTDB: g__Paenibacillus_AN ; NCBI: g__Paenibacillus )"	1	NA	NA	NA
+"p__Bacillota (GTDB: g__Paenibacillus_AO ; NCBI: g__Paenibacillus )"	1	NA	NA	NA
+"p__Bacillota (GTDB: g__Paenibacillus_AP ; NCBI: g__Paenibacillus )"	2	NA	NA	NA
+"p__Bacillota (GTDB: g__Paenibacillus_AQ ; NCBI: g__Paenibacillus )"	115	NA	NA	NA
+"p__Bacillota (GTDB: g__Paenibacillus_AR ; NCBI: g__Paenibacillus )"	2	NA	NA	NA
+"p__Bacillota (GTDB: g__Paenibacillus_B ; NCBI: g__Paenibacillus )"	21	NA	NA	NA
+"p__Bacillota (GTDB: g__Paenibacillus_D ; NCBI: g__Paenibacillus )"	9	NA	NA	NA
+"p__Bacillota (GTDB: g__Paenibacillus_E ; NCBI: g__Paenibacillus )"	37	NA	NA	NA
+"p__Bacillota (GTDB: g__Paenibacillus_F ; NCBI: g__Paenibacillus )"	7	NA	NA	NA
+"p__Bacillota (GTDB: g__Paenibacillus_G ; NCBI: g__Paenibacillus )"	28	NA	NA	NA
+"p__Bacillota (GTDB: g__Paenibacillus_H ; NCBI: g__Paenibacillus )"	1	NA	NA	NA
+"p__Bacillota (GTDB: g__Paenibacillus_I ; NCBI: g__Paenibacillus )"	4	NA	NA	NA
+"p__Bacillota (GTDB: g__Paenibacillus_K ; NCBI: g__Paenibacillus )"	3	NA	NA	NA
+"p__Bacillota (GTDB: g__Paenibacillus_L ; NCBI: g__Paenibacillus )"	3	NA	NA	NA
+"p__Bacillota (GTDB: g__Paenibacillus_N ; NCBI: g__Paenibacillus )"	2	NA	NA	NA
+"p__Bacillota (GTDB: g__Paenibacillus_O ; NCBI: g__Paenibacillus )"	7	NA	NA	NA
+"p__Bacillota (GTDB: g__Paenibacillus_S ; NCBI: g__Paenibacillus )"	15	NA	NA	NA
+"p__Bacillota (GTDB: g__Paenibacillus_T ; NCBI: g__Paenibacillus )"	7	NA	NA	NA
+"p__Bacillota (GTDB: g__Paenibacillus_V ; NCBI: g__Paenibacillus )"	2	NA	NA	NA
+"p__Bacillota (GTDB: g__Paenibacillus_W ; NCBI: g__Paenibacillus )"	1	NA	NA	NA
+"p__Bacillota (GTDB: g__Paenibacillus_Z ; NCBI: g__Paenibacillus )"	29	NA	NA	NA
+"p__Bacillota (GTDB: g__Pristimantibacillus ; NCBI: g__Paenibacillus )"	32	NA	NA	NA
+"p__Bacillota (GTDB: g__Pseudoflavonifractor_A ; NCBI: g__Flavonifractor )"	4	NA	NA	NA
+"p__Bacillota (GTDB: g__RUG11783 ; NCBI: g__Faecalibacterium )"	2	NA	NA	NA
+"p__Bacillota (GTDB: g__Roseburia ; NCBI: g__Agathobacter )"	41	NA	NA	NA
+"p__Bacillota (GTDB: g__Saccharibacillus ; NCBI: g__Paenibacillus )"	10	NA	NA	NA
+"p__Bacillota (GTDB: g__UBA11524 ; NCBI: g__Faecalibacterium )"	7	NA	NA	NA
+"p__Bacillota (GTDB: g__UBA1762 ; NCBI: g__Faecalibacterium )"	2	NA	NA	NA
+"p__Bacillota (GTDB: g__UBA1771 ; NCBI: g__Faecalibacterium )"	1	NA	NA	NA
+"p__Bacillota (GTDB: g__UBA6857 ; NCBI: g__Faecalibacterium )"	12	NA	NA	NA
+"p__Bacillota (GTDB: g__UBA7177 ; NCBI: g__Faecalibacterium )"	1	NA	NA	NA
+"p__Bacillota (GTDB: g__Vescimonas ; NCBI: g__Agathobacter )"	1	NA	NA	NA
+"p__Bacillota_I (GTDB: g__Colivicinus ; NCBI: g__Agathobacter )"	1	NA	NA	NA
+"p__Bacillota_I (GTDB: g__Onthocola_B ; NCBI: g__Agathobacter )"	1	NA	NA	NA
+"p__Bacillota_I (GTDB: g__UBA4951 ; NCBI: g__Faecalibacterium )"	1	NA	NA	NA
+"p__Bacteroidota (GTDB: g__Bacteroides ; NCBI: g__Faecalibacterium )"	1	NA	NA	NA
+"p__Bacteroidota (GTDB: g__JAFMPW01 ; NCBI: g__Muriicola )"	1	NA	NA	NA
+"p__Bacteroidota (GTDB: g__JTS-RE37 ; NCBI: g__Muriicola )"	1	NA	NA	NA
+"p__Bacteroidota (GTDB: g__Muriicola ; NCBI: g__ )"	8	NA	NA	NA
+"p__Bacteroidota (GTDB: g__Muriicola ; NCBI: g__Eudoraea )"	3	NA	NA	NA
+"p__Bacteroidota (GTDB: g__Muriicola ; NCBI: g__Muriicola )"	11	NA	NA	NA
+"p__Bacteroidota (GTDB: g__Prevotella ; NCBI: g__Faecalibacterium )"	1	NA	NA	NA
+"p__Bacteroidota (GTDB: g__Sodaliphilus ; NCBI: g__Agathobacter )"	1	NA	NA	NA
+"p__Chloroflexota (GTDB: g__Defluviilinea ; NCBI: g__Candidatus Defluviilinea )"	1	NA	NA	NA
+"p__Muiribacteriota (GTDB: g__Muiribacterium ; NCBI: g__Candidatus Muiribacterium )"	1	NA	NA	NA
+"p__Pseudomonadota (GTDB: g__Aquipseudomonas ; NCBI: g__Pseudomonas )"	934	NA	NA	NA
+"p__Pseudomonadota (GTDB: g__Chryseomonas ; NCBI: g__Pseudomonas )"	17	NA	NA	NA
+"p__Pseudomonadota (GTDB: g__Denitrificimonas ; NCBI: g__Pseudomonas )"	5	NA	NA	NA
+"p__Pseudomonadota (GTDB: g__Geopseudomonas ; NCBI: g__Pseudomonas )"	9	NA	NA	NA
+"p__Pseudomonadota (GTDB: g__Halopseudomonas ; NCBI: g__Pseudomonas )"	15	NA	NA	NA
+"p__Pseudomonadota (GTDB: g__JAZDRH01 ; NCBI: g__Pseudomonas )"	1	NA	NA	NA
+"p__Pseudomonadota (GTDB: g__Ketogulonicigenium ; NCBI: g__Ketogulonicigenium )"	2	"I-C"	1	0.5
+"p__Pseudomonadota (GTDB: g__Metapseudomonas ; NCBI: g__Pseudomonas )"	14	NA	NA	NA
+"p__Pseudomonadota (GTDB: g__Methylobacterium ; NCBI: g__ )"	6	NA	NA	NA
+"p__Pseudomonadota (GTDB: g__Methylobacterium ; NCBI: g__Methylobacterium )"	125	"I-C"	13	0.104
+"p__Pseudomonadota (GTDB: g__Methylobacterium ; NCBI: g__Methylobacterium )"	125	"I-E"	19	0.152
+"p__Pseudomonadota (GTDB: g__Methylobacterium ; NCBI: g__Methylobacterium )"	125	"V-B1"	1	0.008
+"p__Pseudomonadota (GTDB: g__Methylobacterium ; NCBI: g__Methylobacterium )"	125	"V-M"	11	0.088
+"p__Pseudomonadota (GTDB: g__Methylobacterium ; NCBI: g__Methylorubrum )"	15	NA	NA	NA
+"p__Pseudomonadota (GTDB: g__Methylomonas ; NCBI: g__Methylomonas )"	1	"I-E"	1	1
+"p__Pseudomonadota (GTDB: g__Methylomonas ; NCBI: g__Methylomonas )"	1	"I-F"	1	1
+"p__Pseudomonadota (GTDB: g__Methylomonas ; NCBI: g__Methylomonas )"	1	"III-A"	1	1
+"p__Pseudomonadota (GTDB: g__Pollutimonas ; NCBI: g__Pseudomonas )"	1	NA	NA	NA
+"p__Pseudomonadota (GTDB: g__Pseudidiomarina ; NCBI: g__Pseudomonas )"	2	NA	NA	NA
+"p__Pseudomonadota (GTDB: g__Pseudomonas ; NCBI: g__ )"	1	NA	NA	NA
+"p__Pseudomonadota (GTDB: g__Pseudomonas ; NCBI: g__Halopseudomonas )"	1	NA	NA	NA
+"p__Pseudomonadota (GTDB: g__Pseudomonas ; NCBI: g__Pseudomonas )"	32	"I-C"	1	0.03125
+"p__Pseudomonadota (GTDB: g__Pseudomonas ; NCBI: g__Pseudomonas )"	32	"I-E"	4	0.125
+"p__Pseudomonadota (GTDB: g__Pseudomonas ; NCBI: g__Pseudomonas )"	32	"I-F"	8	0.25
+"p__Pseudomonadota (GTDB: g__Pseudomonas ; NCBI: g__Pseudomonas )"	32	"IV-A1"	1	0.03125
+"p__Pseudomonadota (GTDB: g__Pseudomonas_M ; NCBI: g__Pseudomonas )"	2	NA	NA	NA
+"p__Pseudomonadota (GTDB: g__Pseudomonas_O ; NCBI: g__Pseudomonas )"	2	NA	NA	NA
+"p__Pseudomonadota (GTDB: g__Pseudomonas_P ; NCBI: g__Pseudomonas )"	1	NA	NA	NA
+"p__Pseudomonadota (GTDB: g__Pseudomonas_S ; NCBI: g__Pseudomonas )"	1	NA	NA	NA
+"p__Pseudomonadota (GTDB: g__Pseudomonas_T ; NCBI: g__Pseudomonas )"	2	NA	NA	NA
+"p__Pseudomonadota (GTDB: g__Rhabdaerophilum ; NCBI: g__Methylobacterium )"	6	NA	NA	NA
+"p__Pseudomonadota (GTDB: g__Rhodanobacter ; NCBI: g__Methylobacterium )"	1	NA	NA	NA
+"p__Pseudomonadota (GTDB: g__Serpens ; NCBI: g__Pseudomonas )"	6	NA	NA	NA
+"p__Pseudomonadota (GTDB: g__Serratia ; NCBI: g__Pseudomonas )"	1	NA	NA	NA
+"p__Pseudomonadota (GTDB: g__Sneathiella ; NCBI: g__Pseudomonas )"	1	NA	NA	NA
+"p__Pseudomonadota (GTDB: g__Stutzerimonas ; NCBI: g__Pseudomonas )"	19	NA	NA	NA
+"p__Pseudomonadota (GTDB: g__UBA6156 ; NCBI: g__Pseudomonas )"	1	NA	NA	NA
+"p__Spirochaetota (GTDB: g__Ornithospirochaeta ; NCBI: g__Faecalibacterium )"	1	NA	NA	NA
+"p__Thermoplasmatota (GTDB: g__Methanomethylophilus ; NCBI: g__Faecalibacterium )"	1	NA	NA	NA
+"p__Verrucomicrobiota (GTDB: g__Spyradenecus ; NCBI: g__Agathobacter )"	1	NA	NA	NA
+"p__Verrucomicrobiota (GTDB: g__UBA1067 ; NCBI: g__Faecalibacterium )"	2	NA	NA	NA
