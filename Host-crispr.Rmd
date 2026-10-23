@@ -297,7 +297,7 @@ genomes_with_crispr_count_genus <- contigs_with_crispr %>% mutate(PG = paste(Phy
 colnames(genomes_with_crispr_count_genus)[3] <- "genomes_with_crispr"
 
 
-genomes_all_count_genus <- taxonomy %>% filter(gtdb_species_representative == TRUE) %>%
+genomes_all_count_genus <- taxonomy %>% 
   separate(gtdb_taxonomy, sep="; ", into=c("Domain","Phylum","Class","Order","Family","Genus","Species")) %>%
   separate(ncbi_taxonomy, sep="; ", into=c("Domain_ncbi","Phylum_ncbi","Class_ncbi","Order_ncbi","Family_ncbi","Genus_ncbi","Species_ncbi")) %>%
   mutate(PG = paste(Phylum, "(GTDB:", Genus, "; NCBI:", Genus_ncbi,")")) %>% 
