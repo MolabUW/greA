@@ -294,10 +294,12 @@ genomes_all_count_genus <- taxonomy_downloaded %>%
   separate(ncbi_taxonomy, sep="; ", into=c("Domain_ncbi","Phylum_ncbi","Class_ncbi","Order_ncbi","Family_ncbi","Genus_ncbi","Species_ncbi")) %>%
   mutate(PG = paste(Phylum, "(GTDB:", Genus, "; NCBI:", Genus_ncbi,")")) %>% 
   filter(Genus %in% genus_only | Genus_ncbi %in% genus_only) %>%
+  distinct() %>% 
   select(accession,PG) %>%
   group_by(PG) %>% tally()
 
 sum(genomes_all_count_genus$n)
+# 2314 total genomes.
 
 colnames(genomes_all_count_genus)[2] <- "total_genomes"
 
@@ -324,16 +326,49 @@ heatmap_genus <- ggplot(genomes_count_genus %>% filter(Prediction != "NA"), aes(
 
 heatmap_genus
 
+ggsave(filename = "Output/heatmap.pdf", 
+       width = 8.5, 
+       height = 7)
+
 library(forcats)
 
-bar_genus <- ggplot(
-  genomes_count_genus %>% 
-    filter(!is.na(Prediction)) %>% 
-    select(PG, genomes_with_crispr, total_genomes) %>% 
-    gather("type", "count", genomes_with_crispr, total_genomes) %>% 
-    group_by(PG, type) %>%
-    summarize(sum_count = sum(count), .groups = "drop"),
-  
+# Count table for bar plot:
+# Get how many genomes were analyzed
+# Get how many genomes were analyzed AND had a crispr system results
+
+total_genomes_table <- taxonomy_downloaded %>% 
+  separate(gtdb_taxonomy, sep="; ", into=c("Domain","Phylum","Class","Order","Family","Genus","Species")) %>%
+  separate(ncbi_taxonomy, sep="; ", into=c("Domain_ncbi","Phylum_ncbi","Class_ncbi","Order_ncbi","Family_ncbi","Genus_ncbi","Species_ncbi")) %>%
+  mutate(PG = paste(Phylum, "(GTDB:", Genus, "; NCBI:", Genus_ncbi,")")) %>% 
+  distinct() %>% 
+  select(accession,PG) %>%
+  group_by(PG) %>% tally() %>% arrange(desc(n)) %>%
+  rename(total_genomes = n)
+
+total_genomes_with_results_table <- contigs_with_crispr %>% 
+  mutate(PG = paste(Phylum, "(GTDB:", Genus, "; NCBI:", Genus_ncbi,")")) %>% 
+  distinct() %>% 
+  #filter(Genus %in% genus_only | Genus_ncbi %in% genus_only) %>%
+  select(accession,PG) %>%
+  distinct() %>%
+  group_by(PG) %>% 
+  tally() %>% 
+  arrange(desc(n)) %>%
+  rename(genomes_with_crispr_results = n)
+
+total_genomes_for_bar_plot <- full_join(total_genomes_table, total_genomes_with_results_table)
+
+total_genomes_for_bar_plot$percentage <- total_genomes_for_bar_plot$genomes_with_crispr_results/total_genomes_for_bar_plot$total_genomes
+
+write.table(total_genomes_for_bar_plot, "Output/total_genomes_for_bar_plot.tsv", sep="\t", row.names = FALSE)
+
+total_genomes_for_bar_plot.2 <- total_genomes_for_bar_plot %>% gather("type","sum_count","total_genomes":"genomes_with_crispr_results")
+
+PG_plotted <- genomes_count_genus %>% filter(Prediction != "NA") %>% select(PG) %>% distinct() %>% pull()
+
+bar_genus <- ggplot( total_genomes_for_bar_plot.2 %>%
+                       filter(!is.na(percentage)) %>%
+                       filter(PG %in% PG_plotted),
   aes(x = sum_count, y = PG, fill = fct_rev(type))) + 
   geom_col(position = position_dodge(width = 0.9)) +
   geom_text(
@@ -343,10 +378,10 @@ bar_genus <- ggplot(
     size = 2
   ) +
   scale_x_continuous(expand = expansion(mult = c(0, 0.15))) +
-  scale_fill_manual(values=c("genomes_with_crispr"="#93193a",
+  scale_fill_manual(values=c("genomes_with_crispr_results"="#93193a",
                               "total_genomes"="#2f3794")) +
   theme(
-    text = element_text(color="black", size=9),
+    text = element_text(color="black", size=6),
     axis.text = element_text(color = "black"),
     axis.text.y = element_text(color = "black"),
     axis.title = element_text(color = "black"),
@@ -362,6 +397,10 @@ bar_genus <- ggplot(
 bar_genus
 
 library(ggpubr)
+
+ggsave(filename = "Output/barplot.pdf", 
+       width = 8.5, 
+       height = 7)
 
 ggarrange(heatmap_genus, bar_genus, align = "h")
 bar_genus_minimal <- bar_genus + theme(axis.text.y = element_blank(), axis.title.y = element_blank(), legend.position="none")
