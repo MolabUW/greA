@@ -43,13 +43,16 @@ all_gtdb_raw_unique_good_qual$gtdb_species_representative <- toupper(all_gtdb_ra
 
 all_gtdb_raw_unique_good_qual$ncbi_type_material <- toupper(all_gtdb_raw_unique_good_qual$ncbi_type_material)
 
+# Keep distinct rows only
+all_gtdb_raw_unique_good_qual <- all_gtdb_raw_unique_good_qual %>% distinct()
+
 # Reassess the tally:
 all_gtdb_raw_unique_good_qual %>% group_by(gtdb_species_representative, ncbi_type_material) %>% tally()
 
 # The expected number of rows after filtering.
-558+14556+1277
+558+14474+1276
 
-# The majority of these (106338) are neither gtdb or ncbi type material so we will not analyse them.
+# The majority of these (106 503) are neither gtdb or ncbi type material so we will not analyse them.
 # But it might be good to analyse the ncbi type material even if they are not GTDB species representative.
 
 # For the HTCondor list, I'll use:
@@ -60,6 +63,10 @@ all_gtdb_raw_unique_good_qual_filtered <- all_gtdb_raw_unique_good_qual %>%
 all_gtdb_raw_unique_good_qual_filtered  %>% group_by(gtdb_species_representative, ncbi_type_material) %>% 
   tally()
 
+14474+1276
+summary(all_gtdb_raw_unique_good_qual_filtered)
+str(all_gtdb_raw_unique_good_qual_filtered)
+
 # The first column of that table is what I want to use for the HTCondor code.
 write.table(x= all_gtdb_raw_unique_good_qual_filtered %>% distinct(), file="Output/all_gtdb_raw_unique_good_qual_filtered.tsv", sep="\t", row.names=FALSE)
 
@@ -67,6 +74,8 @@ write.table(x= all_gtdb_raw_unique_good_qual_filtered %>% distinct(), file="Outp
 write.table(x=unique(all_gtdb_raw_unique_good_qual_filtered$accession), file="Output/accessions.txt", row.names = FALSE, col.names = FALSE, quote = FALSE)
 
 length(unique(all_gtdb_raw_unique_good_qual_filtered$accession))
+
+#unique(all_gtdb_raw_unique_good_qual_filtered$accession)
 ```
 
 There are 16 308 genomes to be accessed.
@@ -128,8 +137,12 @@ done
 
 # Summarize the results:
 ls **/cas_operons.tab | wc -l
+
+# Combine them:
+cat **/cas_operons.tab > all_cas_operons.tab
 ```
 
+The file `all_cas_operons.tab` was analysed in R.
 
 # Load the cctyper output data
 
@@ -218,47 +231,14 @@ setdiff(list1,list2)
 #There are 14 genomes we don't have data for...
 # Search those in the raw GTDB data
 
-all_gtdb_raw %>% filter(accession %in% setdiff(list1,list2))
+taxonomy %>% filter(accession %in% setdiff(list1,list2))
+
+View(taxonomy%>% filter(accession %in% setdiff(list1,list2)))
 
 # How many files we have data for (ncbi_datasets/data)
 nrow(contigs_with_crispr)
-```
 
-
-# Summarize family level all the data.
-```{R, eval=FALSE}
-
-genomes_with_crispr_count <- contigs_with_crispr %>% mutate(PCOF= paste(Phylum, Class, Order, Family)) %>% select(accession, Prediction, PCOF) %>% distinct() %>% group_by(Prediction, PCOF) %>% tally()
-
-colnames(genomes_with_crispr_count)[3] <- "genomes_with_crispr"
-
-
-
-genomes_all_count <- taxonomy %>% filter(gtdb_species_representative == TRUE) %>%
-  separate(gtdb_taxonomy, sep="; ", into=c("Domain","Phylum","Class","Order","Family","Genus","Species")) %>%
-  separate(ncbi_taxonomy, sep="; ", into=c("Domain_ncbi","Phylum_ncbi","Class_ncbi","Order_ncbi","Family_ncbi","Genus_ncbi","Species_ncbi")) %>%
- mutate(PCOF= paste(Phylum, Class, Order, Family)) %>% 
-  select(accession,PCOF) %>%
-  group_by(PCOF) %>% tally()
-
-colnames(genomes_all_count)[2] <- "total_genomes"
-
-
-genomes_count <- full_join(genomes_all_count, genomes_with_crispr_count)
-
-genomes_count <- genomes_count %>% mutate(percentage = genomes_with_crispr/total_genomes)
-
-ggplot(genomes_count %>% filter(Prediction != "NA"), aes(x=Prediction, y=PCOF, col = percentage, fill=percentage))+
-  geom_tile()+
-  scale_color_distiller(palette = "Spectral")+
-  scale_fill_distiller(palette = "Spectral")+
-  theme(axis.text.x = element_text(angle = 90))+
-  theme(
-    panel.background = element_rect(fill = "#F5F2F2", color = "black")
-  )
-
-
-#ggsave("figures/greA/family_level_summary.pdf", width = 11, height = 8)
+taxonomy_downloaded <- taxonomy%>% filter(!accession %in% setdiff(list1,list2))
 ```
 
 # Genus only plot
@@ -269,38 +249,55 @@ genus_only <- c("g__Ketogulonicigenium",
                 "g__GPS1B09",
                 "g__Anaerovibrio",
                 "g__Faecalibacterium",
-                "g__Agathobacter", # g__Roseburia or
+                "g__Agathobacter", 
                 "g__Methylomonas",
                 "g__Methylobacterium",
-                "g__Muiribacterium", #--> not there
-                "g__Muriicola", #--> none in results
-                "g__Defluviilinea", #--> none in results
+                "g__Muiribacterium", 
+                "g__Muriicola", 
+                "g__Defluviilinea", 
                 "g__Flavonifractor",
                 "g__Herbinix",
                 "g__Pseudomonas")
 
 contigs_with_crispr_genus_gtdb <- contigs_with_crispr %>% filter(Genus %in% genus_only)
 contigs_with_crispr_genus_ncbi <- contigs_with_crispr %>% filter(Genus_ncbi %in% genus_only)
-contigs_with_crispr_genus <- rbind(contigs_with_crispr_genus_ncbi, contigs_with_crispr_genus_gtdb)
+
+# combine them
+contigs_with_crispr_genus <- rbind(contigs_with_crispr_genus_ncbi, contigs_with_crispr_genus_gtdb) %>% distinct()
+
+nrow(contigs_with_crispr_genus)
+
+# there are 543 rows belonging to these groups.
 
 length(unique(contigs_with_crispr_genus$accession))
+# They are in 416 genome folders.
 
-# there are 168 genomes belonging to these groups.
+# Summarize the results data at the genus level.
+genomes_with_crispr_count_genus <- contigs_with_crispr_genus %>% 
+  mutate(PG = paste(Phylum, "(GTDB:", Genus, "; NCBI:", Genus_ncbi,")")) %>% 
+  #filter(Genus %in% genus_only | Genus_ncbi %in% genus_only) %>%
+  select(accession, Prediction, PG) %>% 
+  distinct() %>% 
+  group_by(Prediction, PG) %>% 
+  tally()
 
-# Summarize the data at the genus level.
-genomes_with_crispr_count_genus <- contigs_with_crispr %>% mutate(PG = paste(Phylum, "(GTDB:", Genus, "; NCBI:", Genus_ncbi,")")) %>% filter(Genus %in% genus_only) %>%
-  select(accession, Prediction, PG) %>% distinct() %>% group_by(Prediction, PG) %>% tally()
+View(genomes_with_crispr_count_genus)
 
 colnames(genomes_with_crispr_count_genus)[3] <- "genomes_with_crispr"
 
+# Get the sum of the 3rd column:
+sum(genomes_with_crispr_count_genus$genomes_with_crispr)
+# 512 genus combination names.
 
-genomes_all_count_genus <- taxonomy %>% 
+genomes_all_count_genus <- taxonomy_downloaded %>% 
   separate(gtdb_taxonomy, sep="; ", into=c("Domain","Phylum","Class","Order","Family","Genus","Species")) %>%
   separate(ncbi_taxonomy, sep="; ", into=c("Domain_ncbi","Phylum_ncbi","Class_ncbi","Order_ncbi","Family_ncbi","Genus_ncbi","Species_ncbi")) %>%
   mutate(PG = paste(Phylum, "(GTDB:", Genus, "; NCBI:", Genus_ncbi,")")) %>% 
   filter(Genus %in% genus_only | Genus_ncbi %in% genus_only) %>%
   select(accession,PG) %>%
   group_by(PG) %>% tally()
+
+sum(genomes_all_count_genus$n)
 
 colnames(genomes_all_count_genus)[2] <- "total_genomes"
 
@@ -373,6 +370,6 @@ ggarrange(heatmap_genus, bar_genus_minimal, align = "h", widths = c(1,0.5))
 
 ggsave(filename = "Output/heatmap_barplot_genus_level_summary.pdf", 
        width = 8.5, 
-       height = 4)
+       height = 7)
 
 ```
